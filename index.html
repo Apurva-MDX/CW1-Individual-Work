@@ -335,21 +335,8 @@
                     },
 
                     sortedLessons(lessons, sort){
-
-                    if(this.sort.sortingMethod == "location" && this.sort.sortingOrder === "ascending" ){
-                    function compare (a, b){
-                        if (a.location > b.location) return 1;
-                        if (a.location < b.location) return -1;
-                        return 0;
-                    }
                     
-                }else if(this.sort.sortingMethod == "location" && this.sort.sortingOrder === "descending" ){
-                    function compare (a, b){
-                        if (a.location < b.location) return 1;
-                        if (a.location > b.location) return -1;
-                        return 0;
-                    }
-                }else if(this.sort.sortingMethod === "price" && this.sort.sortingOrder === "ascending" ){
+                if(this.sort.sortingMethod === "price" && this.sort.sortingOrder === "ascending" ){
                     function compare (a, b){
                         if (a.price > b.price) return 1;
                         if (a.price < b.price) return -1;
