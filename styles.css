@@ -1,0 +1,10 @@
+aside {
+    width: 25%;
+    height: 420px;
+    padding-left: 30px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    float: right;
+    background-color: black;
+    color:white;
+  }
