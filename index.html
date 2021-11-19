@@ -66,7 +66,7 @@
                     NV: 'Nevada',
                 },
 
-            user:{
+            buyer:{
                 id: '',
                 name: '',
                 number: '',
@@ -78,28 +78,28 @@
 
         methods:{
                 
-                addToCart: function(lessons) {
+                addToCart: function(subjects) {
                     
-                    this.cart.push(lessons);
+                    this.cart.push(subjects);
                 },
 
-                deleteFromCart: function(lessons, cart) {
-                   this.cart.splice(this.cart.indexOf(lessons), 1);
+                deleteFromCart: function(subjects, cart) {
+                   this.cart.splice(this.cart.indexOf(subjects), 1);
                 },
 
                 showCheckout: function(){
-                    console.log(this.showProd);
-                    this.showProd = this.showProd ? false : true;
+                    console.log(this.showProduct);
+                    this.showProduct = this.showProduct ? false : true;
                 },
 
-                submitForm(user) {
+                submitForm(buyer) {
                     
-                    alert('Cheers '+ user.name + ' ,your order has been successfully submitted');
+                    alert('Thank you for purchasing'+ buyer.name + 'Your order has been placed!');
                 
                 },
 
-                canAddToCart: function(lessons){
-                    return lessons.availablespace > this.cartCount(lessons);
+                canAddToCart: function(subjects){
+                    return subjects.availableInventory > this.cartCount(subjects);
                 },
 
                 cartCount(id) {
@@ -111,22 +111,60 @@
                     }
                     return count;
                 },
+            },
                 
             computed: {
-                //returns length of the cart items
-                cartItemCount: function() {
-                    return this.cart.length || ''
+                    cartItemCount: function(subjects){
+                        return this.cart.length || '';
+                    },
+
+                    sortedSubjects(subjects, sort){
+                    //These make the sorting of price and subject by ascending to descending
+
+                    if(this.sort.sortingMethod === "price" && this.sort.sortingOrder === "ascending" ){
+                    function compare (a, b){
+                        if (a.price > b.price) return 1;
+                        if (a.price < b.price) return -1;
+                        return 0;
+                    }
+                }else if(this.sort.sortingMethod === "price" && this.sort.sortingOrder === "descending" ){
+                    function compare (a, b){
+                        if (a.price < b.price) return 1;
+                        if (a.price > b.price) return -1;
+                        return 0;
+                    }
+                }else if(this.sort.sortingMethod == "title" && this.sort.sortingOrder === "ascending" ){
+                    function compare (a, b){
+                        if (a.title > b.title) return 1;
+                        if (a.title < b.title) return -1;
+                        return 0;
+                    }
+                }else if(this.sort.sortingMethod == "title" && this.sort.sortingOrder === "descending" ){
+                    function compare (a, b){
+                        if (a.title < b.title) return 1;
+                        if (a.title > b.title) return -1;
+                        return 0;
+                    }
+                }else if(this.sort.sortingMethod == "availableInventory" && this.sort.sortingOrder === "ascending" ){
+                    function compare (a, b){
+                        if (a.availableInventory > b.availableInventory) return 1;
+                        if (a.availableInventory < b.availableInventory) return -1;
+                        return 0;
+                    }
+                }else if(this.sort.sortingMethod == "availableInventory" && this.sort.sortingOrder === "descending" ){
+                    function compare (a, b){
+                        if (a.availableInventory < b.availableInventory) return 1;
+                        if (a.availableInventory > b.availableInventory) return -1;
+                        return 0;
+                    }
+                }
+                    return this.title.sort(compare);
+
                 },
 
-                //checks if cartItems is < availableInventory
-                canAddToCart: function() {
-                    return this.product.availableInventory > this.cartItemCount;
-                }
-
-            }
-
-        }
-        );
+                    
+                },     
+            })
     </script>
 </body>
 </html>
