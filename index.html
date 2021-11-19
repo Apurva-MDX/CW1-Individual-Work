@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>After School Club</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/5.15.1/css/all.min.css">
+    </head>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script src="https://kit.fontawesome.com/7080cd0a09.js" crossorigin="anonymous"></script>
     <script src="subjects.js"></script>
@@ -30,7 +33,7 @@
         <aside>
             <p><b>Sort type</b></p>
                 <input type="radio" id="subject"  v-model="sort.sortingMethod" value="subject">
-                <label for="subject">Subject (A to Z)</label><br>
+                <label for="subject">Subject</label><br>
 
                 <input type="radio" id="price"  v-model="sort.sortingMethod" value="price">
                 <label for="price">Price (lowest to highest)</label><br>
@@ -55,11 +58,11 @@
                 <h5 class="card-title" >Subject : {{lessons.subject}}</h5>
                 <p class="card-text" > Location : {{lessons.location}} </p>
                 <p> <b>Price : £{{lessons.price}}</b></p>
-                <p class="text-danger" v-if="lessons.availableInventory === cartCount(lessons) "> Completely Booked</p>
+                <p class="text-danger" v-if="lessons.availableInventory === cartCount(lessons) ">Sorry, Fully Booked!</p>
                 <p class="text-success" v-else>Available Spaces : {{lessons.availableInventory - cartCount(lessons)}}</p>
 
-                <button href="#" v-on:click ='addToCart(lessons)' v-if='canAddToCart(lessons)' >Add To Cart</button>
-                <button hidden href="#" v-else >Add To Cart</button>
+                <button href="#" class="fas fa-cart-plus" v-on:click ='addToCart(lessons)' v-bind:disabled='!canAddToCart(lessons)' >Add To Cart</button>
+                <button hidden href="#" class="fas fa-cart-plus" v-else >Add To Cart</button>
                     <br>
                 <div>
 
