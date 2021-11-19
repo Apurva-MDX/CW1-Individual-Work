@@ -1,51 +1,259 @@
-<Doctype html>
-    <head>
-        <title> After School CLub </title>
-        <script src="https://unpkg.com/vue"></script>
-        <script src="/subjects.js"></script>
-        <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/5.15.1/css/all.min.css">
-    </head>
-    <body> 
-        <div id="app">
-            <main>
-                <button v-on:click='showCheckout'>
-                    {{cartItemCount}}
-                    <span class='fas fa-shopping-cart'></span>
-                    Check Out
-                </button>
-                <br>
-                <br>
-                <div v-if='showProduct'>
-                    <h1 v-text="HomePage"></h1>
-                    <img v-bind:src="product.image"
-                    v-bind:width= 'product.imageWidth'>
-                    <h2>{{product.title}} </h2>
-                    <p>{{product.location}}</p>
-                    <p>Number of Spaces: {{product.NoOfSpaces}}</p>
-                    <p>price: {{product.price}} </p>
-                    <button v-on:click="addToCart" v-bind:disabled='!canAddToCart'>Add to cart</button>
-                </main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>After School Club</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://kit.fontawesome.com/7080cd0a09.js" crossorigin="anonymous"></script>
+    <script>
+       
+        let NoOfSubjects = [
+
+{
+    id: 1001,
+    subject: "Math" ,
+    location: "Centrel London" ,
+    price: 100,
+    image: "image/math.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1002,
+    subject: "English" ,
+    location: "Scotland" ,
+    price: 200,
+    image: "image/English.png", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1003,
+    subject: "Music" ,
+    location: "Manchester" ,
+    price: 100,
+    image: "image/Music.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1004,
+    subject: "Geography" ,
+    location: "Liverpool" ,
+    price: 50,
+    image: "image/Geography.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1005,
+    subject: "History" ,
+    location: "Surrey" ,
+    price: 70,
+    image: "image/History.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1006,
+    subject: "Fine Art" ,
+    location: "Bristol" ,
+    price: 90,
+    image: "image/Art.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1007,
+    subject: "Social Studies" ,
+    location: "Essex" ,
+    price: 75,
+    image: "image/Social.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1008,
+    subject: "Science" ,
+    location: "Norwich" ,
+    price: 100,
+    image: "image/Science.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1009,
+    subject: "Business Management",
+    location: "Newcastle" ,
+    price: 100,
+    image: "image/Business.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+
+{
+    id: 1010,
+    subject: "IT",
+    location: "Kent" ,
+    price: 100,
+    image: "image/IT.jpg", 
+    imageWidth: 200, //expanding the image
+    availableInventory: 5
+    
+},
+];
+    </script>
+
+
+    <style>
+        aside {
+          width: 25%;
+          height: 420px;
+          padding-left: 30px;
+          padding-bottom: 15px;
+          padding-top: 15px;
+          float: right;
+          background-color: black;
+          color:white;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app" class="container" style="margin-top: 10%;">
+    <header>
+        <a style="float: right; background-color: black; height: 50px; width: 70px; color: white;" href="#"  v-if='cartItemCount === "" '  hidden>Cart</a>
+        <a style="float: right; background-color: black; height: 50px; width: 70px; color: white;" href="#" @click="showCheckout()" v-else > <span></span><b>Cart</b>({{cartItemCount}})</a>
+    
+    </header>
+    
+    <div v-if='showProducts'>
+
+        <h1 class="text-center" v-text="HomePage" ></h1>
+
+    
+    <br><br>
+
+        <aside>
+            <p><b>Sort type</b></p>
+                <input type="radio" id="subject"  v-model="sort.sortingMethod" value="subject">
+                <label for="subject">Subject (A to Z)</label><br>
+
+                <input type="radio" id="price"  v-model="sort.sortingMethod" value="price">
+                <label for="price">Price (lowest to highest)</label><br>
+
+                <br><br>
+
+            <p><b>Sort Order</b></p>
+                <input type="radio" id="ascending" name="sort_order" v-model="sort.sortingOrder" value="ascending">
+                <label for="ascending">Ascending</label><br>
+                <input type="radio" id="descending" name="sort_order" v-model="sort.sortingOrder" value="descending">
+                <label for="descending">Descending</label><br>  
+  
+            
+        </aside>
+
+        <div class="string" >
+            
+            <div  v-for="lessons in sortedLessons" style="padding: 10px">
+            <div class="card " style="width: 300px; border-width: 3px; border-color: black; background-color: rgb(26, 43, 4); color: white">
+                <img height="250" v-bind:src="lessons.image">
+                <div class="card-body">
+                <h5 class="card-title" >Subject : {{lessons.subject}}</h5>
+                <p class="card-text" > Location : {{lessons.location}} </p>
+                <p> <b>Price : £{{lessons.price}}</b></p>
+                <p class="text-danger" v-if="lessons.availableInventory === cartCount(lessons) "> Completely Booked</p>
+                <p class="text-success" v-else>Available Spaces : {{lessons.availableInventory - cartCount(lessons)}}</p>
+
+                <button href="#" v-on:click ='addToCart(lessons)' v-if='canAddToCart(lessons)' >Add To Cart</button>
+                <button hidden href="#" v-else >Add To Cart</button>
+                    <br>
+                <div>
+
+                </div>
+            </div>
             </div>
         </div>
-        <div v-else>
 
-        </div>
-        <script type="text/javascript"> 
-          //Vue Object creation
-            var webstore = new Vue(
-            {
-                el: '#app',
-                data: {
-                    HomePage: "After School Club",
-                    CartPage: "The Shopping Cart",
-                    showProduct: true,
+    </div>
+</div>
+
+    <div v-else>
+       <a style="float: left; background-color: black; height: 50px; width: 70px; color: white;" href="#" @click="showCheckout()"  ><b>HOME</b></a> 
+        <h1 class="text-center" v-text="CartPage"></h1>
+        
+    
+    <br><br><br>
+
+        <div class="string" >
+            
+            <div  v-for="lessons in cart" class="col-md-4 mb-5">
+                <div class="card " style="width: 300px; border-width: 3px; border-color: black; background-color: rgb(36, 59, 5); color: white">
+                    <img height="250" v-bind:src="lessons.image">
+                <div class="card-body">
+                <h5 class="card-title" >Subject : {{lessons.subject}}</h5>
+                <p class="card-text" > Location : {{lessons.location}} </p>
+                <p> <b>Price : £{{lessons.price}}</b></p>
+
+                <button style="float: right;" href="#" v-on:click ='deleteFromCart(lessons, cart)' >Remove from Cart</button>
+                
+                    <br>
+                <div>
                     
-                    sort: {
-                    sortingMethod: "location",
-                    sortingOrder: "ascending",
-                },
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div >
+    <center>
+        <h2>Checkout</h2>
+        <br>
+        <form>
+            
+            <input class="form-control" style="width: 60%; background-color: black; color: white;" type="text" v-model="buyer.name" placeholder="Full Name..." required ><br>
+            <input class="form-control" style="width: 60%; background-color: black; color: white;" type="number" v-model="buyer.number" placeholder="Mobile Number..." required><br>
 
+            <input style="margin-bottom: 50px;" @click="submitForm(buyer)" v-if="buyer.name == '' || buyer.number == '' " type="submit" value="Place Order" hidden>
+
+            <p v-else-if="buyer.name == parseInt(buyer.name) " style="background-color: red;color: white;"> Please enter a valid name</p>
+            
+            
+            <input style="margin-bottom: 50px;background-color: black; color: white;" @click="submitForm(buyer)" v-else  type="submit" value="Place Order"> 
+        </form>
+        </center>
+
+    </div>
+
+
+</div>
+
+    <script>
+        var vm = new Vue ({
+            el: "#app",
+            data:{
+                showProducts: true,
+                HomePage: 'Welcome to the After School Club',
+                CartPage: 'The Shopping Cart',
                 order: {
                     firstName: '',
                     lastName: '',
@@ -58,6 +266,16 @@
 
                     
                 },
+                sort: {
+                    sortingMethod: "location",
+                    sortingOrder: "ascending",
+                },
+
+                buyer:{
+                id: '',
+                name: '',
+                number: '',
+            },
 
                 state: {
                     AL: 'Alabama',
@@ -65,45 +283,37 @@
                     CA: 'Canada',
                     NV: 'Nevada',
                 },
+            
+                lesson: NoOfSubjects,
 
-            buyer:{
-                id: '',
-                name: '',
-                number: '',
+               cart: [],
+
             },
-            products: NoOfSubjects,
-            cart: [],
 
-        },
-
-        methods:{
+            methods:{
                 
-                addToCart: function(subjects) {
+                addToCart: function(lessons) {
                     
-                    this.cart.push(subjects);
+                    this.cart.push(lessons);
                 },
 
-                deleteFromCart: function(subjects, cart) {
-                   this.cart.splice(this.cart.indexOf(subjects), 1);
+                deleteFromCart: function(lessons, cart) {
+                   this.cart.splice(this.cart.indexOf(lessons), 1);
                 },
 
                 showCheckout: function(){
-                    console.log(this.showProduct);
-                    this.showProduct = this.showProduct ? false : true;
+                    console.log(this.showProducts);
+                    this.showProducts = this.showProducts ? false : true;
                 },
 
                 submitForm(buyer) {
                     
-<<<<<<< HEAD
-                    alert('Thank you for purchasing'+ buyer.name + 'Your order has been placed!');
-=======
-                    alert('Thank you for purchasing '+ user.name + 'Your order has been placed!');
->>>>>>> ff48bd17acd79598520be1a7162e2d887c4785aa
+                    alert('Thanks for purchasing '+ buyer.name + ', your order has been placed!');
                 
                 },
 
-                canAddToCart: function(subjects){
-                    return subjects.availableInventory > this.cartCount(subjects);
+                canAddToCart: function(lessons){
+                    return lessons.availableInventory > this.cartCount(lessons);
                 },
 
                 cartCount(id) {
@@ -115,21 +325,31 @@
                     }
                     return count;
                 },
-<<<<<<< HEAD
-            },
-                
-=======
 
->>>>>>> ff48bd17acd79598520be1a7162e2d887c4785aa
+
+            },
+
             computed: {
-                    cartItemCount: function(subjects){
+                    cartItemCount: function(lessons){
                         return this.cart.length || '';
                     },
 
-                    sortedSubjects(subjects, sort){
-                    //These make the sorting of price and subject by ascending to descending
+                    sortedLessons(lessons, sort){
 
-                    if(this.sort.sortingMethod === "price" && this.sort.sortingOrder === "ascending" ){
+                    if(this.sort.sortingMethod == "location" && this.sort.sortingOrder === "ascending" ){
+                    function compare (a, b){
+                        if (a.location > b.location) return 1;
+                        if (a.location < b.location) return -1;
+                        return 0;
+                    }
+                    
+                }else if(this.sort.sortingMethod == "location" && this.sort.sortingOrder === "descending" ){
+                    function compare (a, b){
+                        if (a.location < b.location) return 1;
+                        if (a.location > b.location) return -1;
+                        return 0;
+                    }
+                }else if(this.sort.sortingMethod === "price" && this.sort.sortingOrder === "ascending" ){
                     function compare (a, b){
                         if (a.price > b.price) return 1;
                         if (a.price < b.price) return -1;
@@ -141,16 +361,16 @@
                         if (a.price > b.price) return -1;
                         return 0;
                     }
-                }else if(this.sort.sortingMethod == "title" && this.sort.sortingOrder === "ascending" ){
+                }else if(this.sort.sortingMethod == "subject" && this.sort.sortingOrder === "ascending" ){
                     function compare (a, b){
-                        if (a.title > b.title) return 1;
-                        if (a.title < b.title) return -1;
+                        if (a.subject > b.subject) return 1;
+                        if (a.subject < b.subject) return -1;
                         return 0;
                     }
-                }else if(this.sort.sortingMethod == "title" && this.sort.sortingOrder === "descending" ){
+                }else if(this.sort.sortingMethod == "subject" && this.sort.sortingOrder === "descending" ){
                     function compare (a, b){
-                        if (a.title < b.title) return 1;
-                        if (a.title > b.title) return -1;
+                        if (a.subject < b.subject) return 1;
+                        if (a.subject > b.subject) return -1;
                         return 0;
                     }
                 }else if(this.sort.sortingMethod == "availableInventory" && this.sort.sortingOrder === "ascending" ){
@@ -166,13 +386,15 @@
                         return 0;
                     }
                 }
-                    return this.title.sort(compare);
+                    return this.lesson.sort(compare);
 
                 },
 
                     
-                },     
-            })
+                },
+ })
+
     </script>
 </body>
+
 </html>
