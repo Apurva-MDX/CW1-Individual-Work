@@ -2,6 +2,7 @@
     <head>
         <title> After School CLub </title>
         <script src="https://unpkg.com/vue"></script>
+        <script src="/subjects.js"></script>
         <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/5.15.1/css/all.min.css">
     </head>
@@ -16,7 +17,7 @@
                 <br>
                 <br>
                 <div v-if='showProduct'>
-                    <h1 v-text="sitename"></h1>
+                    <h1 v-text="HomePage"></h1>
                     <img v-bind:src="product.image"
                     v-bind:width= 'product.imageWidth'>
                     <h2>{{product.title}} </h2>
@@ -36,36 +37,81 @@
             {
                 el: '#app',
                 data: {
-                    sitename: "After School Club",
+                    HomePage: "After School Club",
+                    CartPage: "The Shopping Cart",
                     showProduct: true,
-                    product:{
-                        id: 1001,
-                        title: "Math" ,
-                        location: "London" ,
-                        price: 100,
-                        NoOfSpaces: 5,
-                        image: "image/math.jpg", //new class image
-                     imageWidth: 200, //making the image expand
-                     availableInventory: 5
-            },
+                    
+                    sort: {
+                    sortingMethod: "location",
+                    sortingOrder: "ascending",
+                },
 
+                order: {
+                    firstName: '',
+                    lastName: '',
+                    address: '',
+                    city: '',
+                    zip: '',
+                    state: '',
+                    method: 'Home',
+                    
+
+                    
+                },
+
+                state: {
+                    AL: 'Alabama',
+                    AR: 'Arizona',
+                    CA: 'Canada',
+                    NV: 'Nevada',
+                },
+
+            user:{
+                id: '',
+                name: '',
+                number: '',
+            },
+            products: NoOfSubjects,
             cart: [],
 
         },
 
-        methods: {
-            //Adds Product to carts and decreases NoOfSpaces by 1
-            addToCart: function () {
-                this.cart.push(this.product.id);
-                this.product.NoOfSpaces--      
+        methods:{
+                
+                addToCart: function(lessons) {
+                    
+                    this.cart.push(lessons);
                 },
 
-             //Toggle visibility of the of product once checked-out
-               showCheckout() {
-                this.showProduct = this.showProduct ? 
-                false : true
-                }
-            },
+                deleteFromCart: function(lessons, cart) {
+                   this.cart.splice(this.cart.indexOf(lessons), 1);
+                },
+
+                showCheckout: function(){
+                    console.log(this.showProd);
+                    this.showProd = this.showProd ? false : true;
+                },
+
+                submitForm(user) {
+                    
+                    alert('Cheers '+ user.name + ' ,your order has been successfully submitted');
+                
+                },
+
+                canAddToCart: function(lessons){
+                    return lessons.availablespace > this.cartCount(lessons);
+                },
+
+                cartCount(id) {
+                    let count = 0;
+                    for(let i = 0; i < this.cart.length; i++) {
+                    if (this.cart[i] === id) {
+                    count++;
+                        }
+                    }
+                    return count;
+                },
+                
             computed: {
                 //returns length of the cart items
                 cartItemCount: function() {

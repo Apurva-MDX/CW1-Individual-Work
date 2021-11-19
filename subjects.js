@@ -1,4 +1,4 @@
-let NoOfLessons = [
+let NoOfSubjects = [
 
     {
         id: 1001,
