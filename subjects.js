@@ -29,7 +29,7 @@ let NoOfLessons = [
         title: "Music" ,
         location: "Manchester" ,
         price: 100,
-        image: "image/Music.jfif", 
+        image: "image/Music.jpg", 
         imageWidth: 200, //expanding the image
         availableInventory: 5
         rating : 5,
