@@ -69,7 +69,7 @@
             computed: {
                 //returns length of the cart items
                 cartItemCount: function() {
-                    return this.cart.length
+                    return this.cart.length || ''
                 },
 
                 //checks if cartItems is < availableInventory
